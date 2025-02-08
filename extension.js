@@ -1,5 +1,5 @@
 /*
- * Edit Desktop Files for GNOME Shell 45+
+ * Edit Desktop Files for GNOME Shell 48+
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,10 +16,10 @@
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
-import GLib from 'gi://GLib';
-import {Extension, InjectionManager, gettext} from 'resource:///org/gnome/shell/extensions/extension.js';
-import {AppMenu} from 'resource:///org/gnome/shell/ui/appMenu.js';
-import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import GLib from 'gi://GLib'
+import {Extension, InjectionManager, gettext} from 'resource:///org/gnome/shell/extensions/extension.js'
+import {AppMenu} from 'resource:///org/gnome/shell/ui/appMenu.js'
+import * as Main from 'resource:///org/gnome/shell/ui/main.js'
 
 /*
 * The Edit Desktop Files extension provides users with an "Edit" button on the pop-up menu
@@ -33,8 +33,8 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 export default class EditDesktopFilesExtension extends Extension {
 
     enable() {
-        this._settings = this.getSettings();
-        this._injectionManager = new InjectionManager();
+        this._settings = this.getSettings()
+        this._injectionManager = new InjectionManager()
         this._modifiedMenus = []
         this._addedMenuItems = []
 
@@ -45,22 +45,22 @@ export default class EditDesktopFilesExtension extends Extension {
         // See: https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/js/ui/appMenu.js
         this._injectionManager.overrideMethod(AppMenu.prototype, 'open',
             originalMethod => {
-                const metadata = this.metadata;
-                const settings = this.getSettings();
-                const modifiedMenus = this._modifiedMenus;
-                const addedMenuItems = this._addedMenuItems;
+                const settings = this.getSettings()
+                const edfLogger = this.getLogger()
+                const modifiedMenus = this._modifiedMenus
+                const addedMenuItems = this._addedMenuItems
 
                 return function (...args) {
 
                     // Suitably awful name to ensure it doesn't conflict with an existing/future property
                     if (this._editDesktopFilesExtensionMenuItem) {
-                        return originalMethod.call(this, ...args);
+                        return originalMethod.call(this, ...args)
                     }
 
                     // Don't display the menu item for windows not backed by a desktop file
-                    const appInfo = this._app?.app_info;
+                    const appInfo = this._app?.app_info
                     if (!appInfo) {
-                        return originalMethod.call(this, ...args);
+                        return originalMethod.call(this, ...args)
                     }
 
                     // Add the 'Edit' MenuItem
@@ -73,14 +73,14 @@ export default class EditDesktopFilesExtension extends Extension {
                             if (customEditCommand.indexOf('%U') != -1) {
                                 editCommand = customEditCommand.replaceAll('%U', `'${appInfo.filename}'`)
                             } else {
-                                console.warn(`${metadata.name}: Custom edit command is missing '%U', falling back to default GNOME Text Editor`)
+                                edfLogger.warn("Custom edit command is missing '%U', falling back to default GNOME Text Editor")
                             }
                         }
 
-                        GLib.spawn_command_line_async(editCommand);
+                        GLib.spawn_command_line_async(editCommand)
                         
                         if(Main.overview.visible) {
-                            Main.overview.hide();
+                            Main.overview.hide()
                         }
                     })
 
@@ -91,7 +91,7 @@ export default class EditDesktopFilesExtension extends Extension {
                         if (menuItem.label) {
                             if (menuItem.label.text == _('App Details')) {
                                 this.moveMenuItem(editMenuItem, i+1)
-                                break;
+                                break
                             }
                         }
                     }
@@ -101,16 +101,16 @@ export default class EditDesktopFilesExtension extends Extension {
                     modifiedMenus.push(this)
                     addedMenuItems.push(editMenuItem)
 
-                    return originalMethod.call(this, ...args);
-                };
+                    return originalMethod.call(this, ...args)
+                }
             }
-        );
+        )
     }
 
     disable() {
         this._settings = null
-        this._injectionManager.clear();
-        this._injectionManager = null;
+        this._injectionManager.clear()
+        this._injectionManager = null
         this.removeAllMenuItems()
         this._addedMenuItems = null
         this._modifiedMenus = null
@@ -124,7 +124,7 @@ export default class EditDesktopFilesExtension extends Extension {
         
         // Delete all added MenuItems
         for (let menuItem of this._addedMenuItems) {
-            menuItem.destroy();
+            menuItem.destroy()
         }
 
         this._addedMenuItems = []

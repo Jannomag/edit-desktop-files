@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-30 18:47-0500\n"
+"POT-Creation-Date: 2025-05-16 18:59-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,8 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: extension.js:31
+#: extension.js:43
 msgid "Edit"
+msgstr ""
+
+#: extension.js:82
+msgid "App Details"
 msgstr ""
 
 #: prefs.js:11 prefs.js:17
@@ -27,7 +31,8 @@ msgstr ""
 
 #: prefs.js:18
 msgid ""
-"The desktop file is opened with the GNOME Text Editor by default.\n"
+"By default, the desktop entry will be opened with your system's default "
+"application for .desktop files.\n"
 "\n"
 "Custom commands must include \"%U\" to indicate where the filepath to the "
 "desktop file should be inserted. If missing, the default command will be "

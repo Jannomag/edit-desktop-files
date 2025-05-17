@@ -26,7 +26,7 @@ gnome-extensions enable editdesktopfiles@dannflower
 
 #### Start a nested Wayland session
 ```sh
-G_MESSAGES_DEBUG="GNOME Shell" WAYLAND_DISPLAY=wayland-1 dbus-run-session -- gnome-shell --nested --wayland
+dbus-run-session -- gnome-shell --nested --wayland
 ```
 
 #### View the preferences window

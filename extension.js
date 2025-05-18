@@ -98,7 +98,7 @@ export default class EditDesktopFilesExtension extends Extension {
     }
 
     openDesktopFile(edfLogger, settings, appInfo) {
-        // If the user has selected a custom command, use that instead of the default
+        // If the user has set a custom command, use that instead of the default app
         if (settings.get_boolean("use-custom-edit-command")) {
             let customEditCommand = settings.get_string("custom-edit-command")
             if (customEditCommand.indexOf('%U') != -1) {

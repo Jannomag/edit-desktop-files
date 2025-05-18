@@ -2,19 +2,22 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # ALBANO BATTISTELLA <ALBANOBATTISTELLA@GMAIL.COM>, 2024.
+# Eric Ostrowski <eric.ostrowski@live.com>, 2025.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-18 18:49-0500\n"
-"PO-Revision-Date: 2024-10-01 20:40+0100\n"
-"Last-Translator: Albano Battistella <albanobattistella@gmail.com>\n"
-"Language-Team: Italian <LL@li.org>\n"
-"Language: it\n"
+"PO-Revision-Date: 2025-05-18 18:58-0500\n"
+"Last-Translator: Eric Ostrowski <eric.ostrowski@live.com>\n"
+"Language-Team: English\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Gtranslator 48.0\n"
 
 #: extension.js:43
 msgid "Edit"
@@ -25,7 +28,6 @@ msgid "General"
 msgstr "Generale"
 
 #: prefs.js:18
-#, fuzzy
 msgid ""
 "By default, the desktop entry will be opened with your system's default "
 "application for .desktop files (usually GNOME Text Editor).\n"
@@ -34,8 +36,9 @@ msgid ""
 "desktop file should be inserted. If missing, the default command will be "
 "used instead.\n"
 msgstr ""
-"Il file desktop viene aperto con l'editor di testo GNOME per impostazione "
-"predefinita.\n"
+"Per impostazione predefinita, la voce del desktop verrà aperta con "
+"l'applicazione predefinita del sistema per i file .desktop (di solito GNOME "
+"Text Editor).\n"
 "\n"
 "I comandi personalizzati devono includere \"%U\" per indicare dove deve "
 "essere inserito il percorso del file desktop. Se manca, verrà utilizzato il "

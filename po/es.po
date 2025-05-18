@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-18 18:24-0500\n"
+"POT-Creation-Date: 2025-05-18 18:49-0500\n"
 "PO-Revision-Date: 2025-05-16 19:13-0500\n"
 "Last-Translator: Eric Ostrowski <eric.ostrowski@live.com>\n"
 "Language-Team: English\n"
@@ -20,10 +20,6 @@ msgstr ""
 #: extension.js:43
 msgid "Edit"
 msgstr "Editar"
-
-#: extension.js:82
-msgid "App Details"
-msgstr ""
 
 #: prefs.js:11 prefs.js:17
 msgid "General"

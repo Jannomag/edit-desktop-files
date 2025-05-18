@@ -15,7 +15,7 @@ export default class EditDesktopFilesPreferences extends ExtensionPreferences {
 
         const group = new Adw.PreferencesGroup({
             title: _('General'),
-            description: _('By default, the desktop entry will be opened with your system\'s default application for .desktop files.\n\n' + 
+            description: _('By default, the desktop entry will be opened with your system\'s default application for .desktop files (usually GNOME Text Editor).\n\n' + 
                 'Custom commands must include "%U" to indicate where the filepath to the desktop file should be inserted. ' +
                 'If missing, the default command will be used instead.\n'
             ),

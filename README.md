@@ -34,6 +34,11 @@ dbus-run-session -- gnome-shell --nested --wayland
 gnome-extensions prefs editdesktopfiles@dannflower
 ```
 
+#### Regenerate translation files
+```sh
+./script/update-translations.sh
+```
+
 #### Recompile schemas
 ```sh
 glib-compile-schemas schemas/

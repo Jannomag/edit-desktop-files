@@ -39,8 +39,8 @@ msgstr ""
 "Editor).\n"
 "\n"
 "Los comandos personalizados deben incluir \"%U\" para indicar dónde se debe "
-"insertar la ruta del archivo de escritorio. Si falta, se utilizará el "
-"comando predeterminado.\n"
+"insertar la ruta al archivo de escritorio. Si falta, se utilizará el comando "
+"predeterminado.\n"
 
 #: prefs.js:27
 msgid "Use Custom Edit Command"

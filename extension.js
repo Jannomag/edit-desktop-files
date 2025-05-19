@@ -1,5 +1,5 @@
 /*
- * Edit Desktop Files for GNOME Shell 48+
+ * Edit Desktop Files for GNOME Shell 45+
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

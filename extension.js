@@ -46,6 +46,7 @@ export default class EditDesktopFilesExtension extends Extension {
         // See: https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/js/ui/appMenu.js
         this._injectionManager.overrideMethod(AppMenu.prototype, 'open',
             originalMethod => {
+                const metadata = this.metadata;
                 const settings = this.getSettings()
                 const modifiedMenus = this._modifiedMenus
                 const addedMenuItems = this._addedMenuItems
@@ -66,7 +67,7 @@ export default class EditDesktopFilesExtension extends Extension {
 
                     // Add the 'Edit' MenuItem
                     let editMenuItem = this.addAction(localizedEditStr, () => {
-                        openDesktopFile(settings, appInfo)
+                        openDesktopFile(metadata, settings, appInfo)
 
                         if(Main.overview.visible) {
                             Main.overview.hide()
@@ -96,7 +97,7 @@ export default class EditDesktopFilesExtension extends Extension {
         )
     }
 
-    openDesktopFile(settings, appInfo) {
+    openDesktopFile(metadata, settings, appInfo) {
         // If the user has set a custom command, use that instead of the default app
         if (settings.get_boolean("use-custom-edit-command")) {
             let customEditCommand = settings.get_string("custom-edit-command")

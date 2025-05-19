@@ -47,7 +47,6 @@ export default class EditDesktopFilesExtension extends Extension {
         this._injectionManager.overrideMethod(AppMenu.prototype, 'open',
             originalMethod => {
                 const settings = this.getSettings()
-                const edfLogger = this.getLogger()
                 const modifiedMenus = this._modifiedMenus
                 const addedMenuItems = this._addedMenuItems
                 const openDesktopFile = this.openDesktopFile
@@ -67,7 +66,7 @@ export default class EditDesktopFilesExtension extends Extension {
 
                     // Add the 'Edit' MenuItem
                     let editMenuItem = this.addAction(localizedEditStr, () => {
-                        openDesktopFile(edfLogger, settings, appInfo)
+                        openDesktopFile(settings, appInfo)
 
                         if(Main.overview.visible) {
                             Main.overview.hide()
@@ -97,7 +96,7 @@ export default class EditDesktopFilesExtension extends Extension {
         )
     }
 
-    openDesktopFile(edfLogger, settings, appInfo) {
+    openDesktopFile(settings, appInfo) {
         // If the user has set a custom command, use that instead of the default app
         if (settings.get_boolean("use-custom-edit-command")) {
             let customEditCommand = settings.get_string("custom-edit-command")
@@ -107,7 +106,7 @@ export default class EditDesktopFilesExtension extends Extension {
                 return
             }
 
-            edfLogger.warn("Custom edit command is missing '%U', falling back to default application")
+            console.warn(`${metadata.name}: Custom edit command is missing '%U', falling back to default application`)
         }
         
         // If the user has not selected a custom command, or the command is invalid, use the default application

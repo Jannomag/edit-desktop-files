@@ -26,12 +26,25 @@ gnome-extensions enable editdesktopfiles@dannflower
 
 #### Start a nested Wayland session
 ```sh
-G_MESSAGES_DEBUG="GNOME Shell" WAYLAND_DISPLAY=wayland-1 dbus-run-session -- gnome-shell --nested --wayland
+dbus-run-session -- gnome-shell --nested --wayland
 ```
 
 #### View the preferences window
 ```sh
 gnome-extensions prefs editdesktopfiles@dannflower
+```
+
+#### Regenerate translation files
+Regenerate translation template:
+```sh
+./script/template-translations.sh
+```
+
+Make sure to remove the entry for "App Details" from the `.pot` files before updating the other translations as this translation will be handled by the Gnome Shell.
+
+Update existing translations:
+```sh
+./script/update-translations.sh
 ```
 
 #### Recompile schemas

@@ -17,6 +17,7 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 import GLib from 'gi://GLib'
+import Gio from 'gi://Gio';
 import {Extension, InjectionManager, gettext} from 'resource:///org/gnome/shell/extensions/extension.js'
 import {AppMenu} from 'resource:///org/gnome/shell/ui/appMenu.js'
 import * as Main from 'resource:///org/gnome/shell/ui/main.js'
@@ -28,7 +29,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js'
 *
 * This is done by injecting a function to run prior to the gnome-shell AppMenu's 'open' method.
 * The function inserts a new "Edit" MenuItem that, when clicked, either opens the backing desktop
-* file with the GNOME Text Editor (default) or a custom command supplied by the user.
+* file with the system's default app for desktop entries or a custom command supplied by the user.
 */
 export default class EditDesktopFilesExtension extends Extension {
 
@@ -45,10 +46,11 @@ export default class EditDesktopFilesExtension extends Extension {
         // See: https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/js/ui/appMenu.js
         this._injectionManager.overrideMethod(AppMenu.prototype, 'open',
             originalMethod => {
+                const metadata = this.metadata;
                 const settings = this.getSettings()
-                const edfLogger = this.getLogger()
                 const modifiedMenus = this._modifiedMenus
                 const addedMenuItems = this._addedMenuItems
+                const openDesktopFile = this.openDesktopFile
 
                 return function (...args) {
 
@@ -65,20 +67,8 @@ export default class EditDesktopFilesExtension extends Extension {
 
                     // Add the 'Edit' MenuItem
                     let editMenuItem = this.addAction(localizedEditStr, () => {
-                        // Open the GNOME Text Editor by default, otherwise use the command provided by the user
-                        let editCommand = `gapplication launch org.gnome.TextEditor '${appInfo.filename}'`
-                        if (settings.get_boolean("use-custom-edit-command")) {
-                            let customEditCommand = settings.get_string("custom-edit-command")
-                            // If the user forgot to include %U in the command, fallback to the default with a warning
-                            if (customEditCommand.indexOf('%U') != -1) {
-                                editCommand = customEditCommand.replaceAll('%U', `'${appInfo.filename}'`)
-                            } else {
-                                edfLogger.warn("Custom edit command is missing '%U', falling back to default GNOME Text Editor")
-                            }
-                        }
+                        openDesktopFile(metadata, settings, appInfo)
 
-                        GLib.spawn_command_line_async(editCommand)
-                        
                         if(Main.overview.visible) {
                             Main.overview.hide()
                         }
@@ -105,6 +95,25 @@ export default class EditDesktopFilesExtension extends Extension {
                 }
             }
         )
+    }
+
+    openDesktopFile(metadata, settings, appInfo) {
+        // If the user has set a custom command, use that instead of the default app
+        if (settings.get_boolean("use-custom-edit-command")) {
+            let customEditCommand = settings.get_string("custom-edit-command")
+            if (customEditCommand.indexOf('%U') != -1) {
+                let editCommand = customEditCommand.replaceAll('%U', `'${appInfo.filename}'`)
+                GLib.spawn_command_line_async(editCommand)
+                return
+            }
+
+            console.warn(`${metadata.name}: Custom edit command is missing '%U', falling back to default application`)
+        }
+        
+        // If the user has not selected a custom command, or the command is invalid, use the default application
+        let file = Gio.File.new_for_path(appInfo.filename)
+        let uri = file.get_uri()
+        Gio.AppInfo.launch_default_for_uri_async(uri, null, null, () => {})
     }
 
     disable() {

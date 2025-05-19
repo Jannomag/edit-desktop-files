@@ -1,11 +1,14 @@
 {
   "name": "Edit Desktop Files",
-  "description": "Edit desktop files by right-clicking their app icon.\n\nThis extension will attempt to use the GNOME Text Editor by default. If it is not installed, or you prefer to use a different editor, this can be changed in the preferences.",
+  "description": "Edit desktop entry files by right-clicking their app icon.\n\nThis extension opens the desktop entry with your system’s default application for .desktop files (usually GNOME Text Editor). To use a different editor, update your system’s default application for .desktop files or set a custom command in the extension’s preferences.",
   "uuid": "editdesktopfiles@dannflower",
   "url": "https://github.com/Dannflower/edit-desktop-files",
   "settings-schema": "org.gnome.shell.extensions.editdesktopfiles",
   "gettext-domain": "editdesktopfiles@dannflower",
   "shell-version": [
+    "45",
+    "46",
+    "47",
     "48"
   ]
 }

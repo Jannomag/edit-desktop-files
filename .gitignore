@@ -1,2 +1,5 @@
 # Exclude the packed extension
 *.zip
+
+# Exclude the compiled schema
+gschemas.compiled

@@ -22,14 +22,14 @@ export default class EditDesktopFilesPreferences extends ExtensionPreferences {
 
         // Create the two rows and add them to the group
         const hideEdit = new Adw.SwitchRow({
-            title: _('Hide Edit Menu Item'),
+            title: _('Hide Edit Desktop Entry Menu Item'),
         });
         genGroup.add(hideEdit);
         
-        const hideShowLoc = new Adw.SwitchRow({
-            title: _('Hide Show Entry Location Menu Item'),
+        const hideOpenLoc = new Adw.SwitchRow({
+            title: _('Hide Open Desktop Entry Location Menu Item'),
         });
-        genGroup.add(hideShowLoc);
+        genGroup.add(hideOpenLoc);
 
         // Advanced settings group
         const advGroup = new Adw.PreferencesGroup({
@@ -55,7 +55,7 @@ export default class EditDesktopFilesPreferences extends ExtensionPreferences {
         // Bind the settings to the rows
         window._settings = this.getSettings();
         window._settings.bind('hide-edit-menu-item', hideEdit, 'active', Gio.SettingsBindFlags.DEFAULT);
-        window._settings.bind('hide-show-entry-location-menu-item', hideShowLoc, 'text', Gio.SettingsBindFlags.DEFAULT);
+        window._settings.bind('hide-open-entry-location-menu-item', hideOpenLoc, 'active', Gio.SettingsBindFlags.DEFAULT);
         window._settings.bind('use-custom-edit-command', useCmdRow, 'active', Gio.SettingsBindFlags.DEFAULT);
         window._settings.bind('custom-edit-command', cmdRow, 'text', Gio.SettingsBindFlags.DEFAULT);
 

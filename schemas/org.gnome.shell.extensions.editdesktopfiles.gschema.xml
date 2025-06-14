@@ -4,7 +4,7 @@
     <key name="hide-edit-menu-item" type="b">
       <default>false</default>
     </key>
-    <key name="hide-show-entry-location-menu-item" type="b">
+    <key name="hide-open-entry-location-menu-item" type="b">
       <default>false</default>
     </key>
     <key name="use-custom-edit-command" type="b">

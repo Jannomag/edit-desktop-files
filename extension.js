@@ -37,10 +37,12 @@ export default class EditDesktopFilesExtension extends Extension {
         this._settings = this.getSettings()
         this._injectionManager = new InjectionManager()
         this._modifiedMenus = []
-        this._addedMenuItems = []
+        this._addedEditMenuItems = []
+        this._addedOpenLocationMenuItems = []
 
-        // Call gettext here explicitly so "Edit" can be localized as part of this extension
-        let localizedEditStr = gettext('Edit')
+        // Call gettext here explicitly so the MenuItems can be localized as part of this extension
+        let localizedEditStr = gettext('Edit Desktop Entry')
+        let localizedOpenLocationStr = gettext('Open Desktop Entry Location')
 
         // Extend the AppMenu's 'open' method to add an 'Edit' MenuItem
         // See: https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/js/ui/appMenu.js
@@ -49,15 +51,15 @@ export default class EditDesktopFilesExtension extends Extension {
                 const metadata = this.metadata;
                 const settings = this.getSettings()
                 const modifiedMenus = this._modifiedMenus
-                const addedMenuItems = this._addedMenuItems
+                const addedEditMenuItems = this._addedEditMenuItems
+                const addedOpenLocationMenuItems = this._addedOpenLocationMenuItems
+
+                // Helper functions
                 const openDesktopFile = this.openDesktopFile
+                const hideOverview = this.hideOverview
+                const moveMenuItemAfterAppDetails = this.moveMenuItemAfterAppDetails
 
                 return function (...args) {
-
-                    // Suitably awful name to ensure it doesn't conflict with an existing/future property
-                    if (this._editDesktopFilesExtensionMenuItem) {
-                        return originalMethod.call(this, ...args)
-                    }
 
                     // Don't display the menu item for windows not backed by a desktop file
                     const appInfo = this._app?.app_info
@@ -65,31 +67,39 @@ export default class EditDesktopFilesExtension extends Extension {
                         return originalMethod.call(this, ...args)
                     }
 
-                    // Add the 'Edit' MenuItem
-                    let editMenuItem = this.addAction(localizedEditStr, () => {
-                        openDesktopFile(metadata, settings, appInfo)
+                    // Bind the helper function to the `this` context of the AppMenu
+                    const boundMoveMenuItemAfterAppDetails = moveMenuItemAfterAppDetails.bind(this)
 
-                        if(Main.overview.visible) {
-                            Main.overview.hide()
-                        }
-                    })
+                    // `Open Desktop Entry Location` MenuItem
+                    if (!settings.get_boolean("hide-open-entry-location-menu-item") && !this._editDesktopFilesExtensionOpenLocationMenuItem) {
+                        let openLocationMenuItem = this.addAction(localizedOpenLocationStr, () => {
+                            console.warn(`${metadata.name}: Show Entry Location is not implemented yet.`)
+                            hideOverview()
+                        })
 
-                    // Move the 'Edit' MenuItem to be after the 'App Details' MenuItem
-                    let menuItems = this._getMenuItems()
-                    for (let i = 0; i < menuItems.length; i++) {
-                        let menuItem = menuItems[i]
-                        if (menuItem.label) {
-                            if (menuItem.label.text == _('App Details')) {
-                                this.moveMenuItem(editMenuItem, i+1)
-                                break
-                            }
-                        }
+                        boundMoveMenuItemAfterAppDetails(openLocationMenuItem)
+
+                        this._editDesktopFilesExtensionOpenLocationMenuItem = openLocationMenuItem
+                        addedOpenLocationMenuItems.push(openLocationMenuItem)
+                    }
+
+                    // `Edit Desktop Entry` MenuItem
+                    if (!settings.get_boolean("hide-edit-menu-item") && !this._editDesktopFilesExtensionEditMenuItem) {
+                        let editMenuItem = this.addAction(localizedEditStr, () => {
+                            openDesktopFile(metadata, settings, appInfo)
+                            hideOverview()
+                        })
+
+                        boundMoveMenuItemAfterAppDetails(editMenuItem)
+
+                        this._editDesktopFilesExtensionEditMenuItem = editMenuItem
+                        addedEditMenuItems.push(editMenuItem)
                     }
 
                     // Keep track of menus that have been affected so they can be cleaned up later
-                    this._editDesktopFilesExtensionMenuItem = editMenuItem
-                    modifiedMenus.push(this)
-                    addedMenuItems.push(editMenuItem)
+                    if (!modifiedMenus.includes(this)) {
+                        modifiedMenus.push(this)
+                    }
 
                     return originalMethod.call(this, ...args)
                 }
@@ -97,6 +107,40 @@ export default class EditDesktopFilesExtension extends Extension {
         )
     }
 
+    /**
+     * Hides the overview if it is currently visible
+     */
+    hideOverview() {
+        if(Main.overview.visible) {
+            Main.overview.hide()
+        }
+    }
+
+    /**
+     * Move the MenuItem to be after the 'App Details' MenuItem
+     * @param {Object} menuItem - The MenuItem to be moved
+     * @returns {void}
+     */
+    moveMenuItemAfterAppDetails(menuItemToMove) {
+        let menuItems = this._getMenuItems()
+        for (let i = 0; i < menuItems.length; i++) {
+            let menuItem = menuItems[i]
+            if (menuItem.label) {
+                if (menuItem.label.text == _('App Details')) {
+                    this.moveMenuItem(menuItemToMove, i+1)
+                    break
+                }
+            }
+        }
+    }
+
+    /**
+     * Open the desktop entry file in the default application or a custom command if the user has set one.
+     * @param {Object} metadata - The metadata of the extension
+     * @param {Gio.Settings} settings - The settings of the extension
+     * @param {Gio.AppInfo} appInfo - The AppInfo of the desktop entry to be edited
+     * @returns {void}
+     */
     openDesktopFile(metadata, settings, appInfo) {
         // If the user has set a custom command, use that instead of the default app
         if (settings.get_boolean("use-custom-edit-command")) {
@@ -120,23 +164,45 @@ export default class EditDesktopFilesExtension extends Extension {
         this._settings = null
         this._injectionManager.clear()
         this._injectionManager = null
-        this.removeAllMenuItems()
-        this._addedMenuItems = null
+        this.removeEditMenuItems()
+        this.removeOpenLocationMenuItems()
+        this._addedEditMenuItems = null
+        this._addedOpenLocationMenuItems = null
         this._modifiedMenus = null
     }
 
-    removeAllMenuItems() {
-        // Delete the added properties
+    /**
+     * Remove the `Edit` MenuItems from the menus
+     * @returns {void}
+     */
+    removeEditMenuItems() {
         for (let menu of this._modifiedMenus) {
-            delete menu._editDesktopFilesExtensionMenuItem
+            delete menu._editDesktopFilesExtensionEditMenuItem
         }
         
-        // Delete all added MenuItems
-        for (let menuItem of this._addedMenuItems) {
+        for (let menuItem of this._addedEditMenuItems) {
             menuItem.destroy()
         }
 
-        this._addedMenuItems = []
-        this._modifiedMenus = []
+        this._addedEditMenuItems = []
     }
+
+    /**
+     * Remove the `Show Entry Location` MenuItems from the menus
+     * @returns {void}
+     */
+    removeOpenLocationMenuItems() {
+        for (let menu of this._modifiedMenus) {
+            delete menu._editDesktopFilesExtensionOpenLocationMenuItem
+        }
+    
+        for (let menuItem of this._addedOpenLocationMenuItems) {
+            menuItem.destroy()
+        }
+
+        this._addedOpenLocationMenuItems = []
+    }
+
+    // TODO: Add callbacks to respond to settings changes
+    // TODO: Update translations to reflect the new menu item names
 }

@@ -48,8 +48,8 @@ export default class EditDesktopFilesExtension extends Extension {
         // See: https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/js/ui/appMenu.js
         this._injectionManager.overrideMethod(AppMenu.prototype, 'open',
             originalMethod => {
-                const metadata = this.metadata;
-                const settings = this.getSettings()
+                const metadata = this.metadata
+                const settings = this._settings
                 const modifiedMenus = this._modifiedMenus
                 const addedEditMenuItems = this._addedEditMenuItems
                 const addedOpenLocationMenuItems = this._addedOpenLocationMenuItems

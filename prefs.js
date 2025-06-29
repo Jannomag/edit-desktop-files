@@ -22,12 +22,12 @@ export default class EditDesktopFilesPreferences extends ExtensionPreferences {
 
         // Create the two rows and add them to the group
         const hideEdit = new Adw.SwitchRow({
-            title: _('Hide Edit Desktop Entry Menu Item'),
+            title: _('Hide Edit Entry Menu Item'),
         });
         genGroup.add(hideEdit);
         
         const hideOpenLoc = new Adw.SwitchRow({
-            title: _('Hide Open Desktop Entry Location Menu Item'),
+            title: _('Hide Open Entry Location Menu Item'),
         });
         genGroup.add(hideOpenLoc);
 

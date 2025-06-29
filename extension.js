@@ -41,8 +41,21 @@ export default class EditDesktopFilesExtension extends Extension {
         this._addedOpenLocationMenuItems = []
 
         // Call gettext here explicitly so the MenuItems can be localized as part of this extension
-        let localizedEditStr = gettext('Edit Desktop Entry')
-        let localizedOpenLocationStr = gettext('Open Desktop Entry Location')
+        let localizedEditStr = gettext('Edit Entry')
+        let localizedOpenLocationStr = gettext('Open Entry Location')
+
+        // List for changes to the 'hide' settings
+        this._settings.connect('changed::hide-edit-menu-item', (settings, key) => {
+            if (settings.get_boolean(key)) {
+                this.removeEditMenuItems()
+            }
+        });
+        this._settings.connect('changed::hide-open-entry-location-menu-item', (settings, key) => {
+            if (settings.get_boolean(key)) {
+                this.removeOpenLocationMenuItems()
+            }
+        });
+
 
         // Extend the AppMenu's 'open' method to add an 'Edit' MenuItem
         // See: https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/js/ui/appMenu.js
@@ -204,5 +217,6 @@ export default class EditDesktopFilesExtension extends Extension {
     }
 
     // TODO: Add callbacks to respond to settings changes
+    // TODO: Implement the 'Open Entry Location' functionality
     // TODO: Update translations to reflect the new menu item names
 }

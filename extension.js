@@ -46,16 +46,17 @@ export default class EditDesktopFilesExtension extends Extension {
 
         // List for changes to the 'hide' settings
         this._settings.connect('changed::hide-edit-menu-item', (settings, key) => {
+            console.log(`${this.metadata.name}: Hide Edit MenuItem setting changed: ${settings.get_boolean(key)}`)
             if (settings.get_boolean(key)) {
                 this.removeEditMenuItems()
             }
         });
         this._settings.connect('changed::hide-open-entry-location-menu-item', (settings, key) => {
+            console.log(`${this.metadata.name}: Hide Open Entry Location MenuItem setting changed: ${settings.get_boolean(key)}`)
             if (settings.get_boolean(key)) {
                 this.removeOpenLocationMenuItems()
             }
         });
-
 
         // Extend the AppMenu's 'open' method to add an 'Edit' MenuItem
         // See: https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/js/ui/appMenu.js
@@ -70,7 +71,7 @@ export default class EditDesktopFilesExtension extends Extension {
                 // Helper functions
                 const openDesktopFile = this.openDesktopFile
                 const hideOverview = this.hideOverview
-                const moveMenuItemAfterAppDetails = this.moveMenuItemAfterAppDetails
+                const moveMenuItemAfter = this.moveMenuItemAfter
 
                 return function (...args) {
 
@@ -81,20 +82,7 @@ export default class EditDesktopFilesExtension extends Extension {
                     }
 
                     // Bind the helper function to the `this` context of the AppMenu
-                    const boundMoveMenuItemAfterAppDetails = moveMenuItemAfterAppDetails.bind(this)
-
-                    // `Open Desktop Entry Location` MenuItem
-                    if (!settings.get_boolean("hide-open-entry-location-menu-item") && !this._editDesktopFilesExtensionOpenLocationMenuItem) {
-                        let openLocationMenuItem = this.addAction(localizedOpenLocationStr, () => {
-                            console.warn(`${metadata.name}: Show Entry Location is not implemented yet.`)
-                            hideOverview()
-                        })
-
-                        boundMoveMenuItemAfterAppDetails(openLocationMenuItem)
-
-                        this._editDesktopFilesExtensionOpenLocationMenuItem = openLocationMenuItem
-                        addedOpenLocationMenuItems.push(openLocationMenuItem)
-                    }
+                    const boundMoveMenuItemAfter = moveMenuItemAfter.bind(this)
 
                     // `Edit Desktop Entry` MenuItem
                     if (!settings.get_boolean("hide-edit-menu-item") && !this._editDesktopFilesExtensionEditMenuItem) {
@@ -103,10 +91,28 @@ export default class EditDesktopFilesExtension extends Extension {
                             hideOverview()
                         })
 
-                        boundMoveMenuItemAfterAppDetails(editMenuItem)
+                        // Move the 'Edit' MenuItem to be after the 'App Details' MenuItem
+                        boundMoveMenuItemAfter(editMenuItem, _('App Details'))
 
                         this._editDesktopFilesExtensionEditMenuItem = editMenuItem
                         addedEditMenuItems.push(editMenuItem)
+                    }
+
+                    // `Open Desktop Entry Location` MenuItem
+                    if (!settings.get_boolean("hide-open-entry-location-menu-item") && !this._editDesktopFilesExtensionOpenLocationMenuItem) {
+                        let openLocationMenuItem = this.addAction(localizedOpenLocationStr, () => {
+                            console.warn(`${metadata.name}: Show Entry Location is not implemented yet.`)
+                            hideOverview()
+                        })
+
+                        // Move the 'Open Entry Location' MenuItem to be after the 'Edit Entry' MenuItem if it exists
+                        let success = boundMoveMenuItemAfter(openLocationMenuItem, localizedEditStr)
+                        if (!success) {
+                            success = boundMoveMenuItemAfter(openLocationMenuItem, _('App Details'))
+                        }
+
+                        this._editDesktopFilesExtensionOpenLocationMenuItem = openLocationMenuItem
+                        addedOpenLocationMenuItems.push(openLocationMenuItem)
                     }
 
                     // Keep track of menus that have been affected so they can be cleaned up later
@@ -130,21 +136,26 @@ export default class EditDesktopFilesExtension extends Extension {
     }
 
     /**
-     * Move the MenuItem to be after the 'App Details' MenuItem
+     * Move the MenuItem to be after the MenuItem with the given afterLabel.
+     * If no such MenuItem exists, the MenuItem will be added after the
+     * 'App Details' MenuItem.
      * @param {Object} menuItem - The MenuItem to be moved
-     * @returns {void}
+     * @param {string} afterLabel - The label of the MenuItem after which the MenuItem should be moved
+     * @returns {boolean} - Returns true if the MenuItem was moved, false if no such MenuItem exists with the given label
      */
-    moveMenuItemAfterAppDetails(menuItemToMove) {
+    moveMenuItemAfter(menuItemToMove, afterLabel) {
         let menuItems = this._getMenuItems()
         for (let i = 0; i < menuItems.length; i++) {
             let menuItem = menuItems[i]
             if (menuItem.label) {
-                if (menuItem.label.text == _('App Details')) {
+                if (menuItem.label.text == afterLabel) {
                     this.moveMenuItem(menuItemToMove, i+1)
-                    break
+                    return true
                 }
             }
         }
+
+        return false
     }
 
     /**
@@ -197,7 +208,7 @@ export default class EditDesktopFilesExtension extends Extension {
             menuItem.destroy()
         }
 
-        this._addedEditMenuItems = []
+        this._addedEditMenuItems.length = 0
     }
 
     /**
@@ -213,7 +224,7 @@ export default class EditDesktopFilesExtension extends Extension {
             menuItem.destroy()
         }
 
-        this._addedOpenLocationMenuItems = []
+        this._addedOpenLocationMenuItems.length = 0
     }
 
     // TODO: Add callbacks to respond to settings changes

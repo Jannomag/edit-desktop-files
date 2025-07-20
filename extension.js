@@ -49,13 +49,11 @@ export default class EditDesktopFilesExtension extends Extension {
 
         // List for changes to the 'hide' settings
         this._settings.connect('changed::hide-edit-menu-item', (settings, key) => {
-            console.log(`${this.metadata.name}: Hide Edit MenuItem setting changed: ${settings.get_boolean(key)}`)
             if (settings.get_boolean(key)) {
                 this.removeEditMenuItems()
             }
         });
         this._settings.connect('changed::hide-open-entry-location-menu-item', (settings, key) => {
-            console.log(`${this.metadata.name}: Hide Open Entry Location MenuItem setting changed: ${settings.get_boolean(key)}`)
             if (settings.get_boolean(key)) {
                 this.removeOpenLocationMenuItems()
             }

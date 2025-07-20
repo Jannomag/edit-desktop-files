@@ -73,6 +73,7 @@ export default class EditDesktopFilesExtension extends Extension {
 
                 // Helper functions
                 const openDesktopFile = this.openDesktopFile
+                const openDesktopFileLocation = this.openDesktopFileLocation
                 const hideOverview = this.hideOverview
                 const moveMenuItemAfter = this.moveMenuItemAfter
 
@@ -104,7 +105,7 @@ export default class EditDesktopFilesExtension extends Extension {
                     // `Open Desktop Entry Location` MenuItem
                     if (!settings.get_boolean("hide-open-entry-location-menu-item") && !this._editDesktopFilesExtensionOpenLocationMenuItem) {
                         let openLocationMenuItem = this.addAction(localizedOpenLocationStr, () => {
-                            console.warn(`${metadata.name}: Show Entry Location is not implemented yet.`)
+                            openDesktopFileLocation(appInfo)
                             hideOverview()
                         })
 
@@ -182,9 +183,37 @@ export default class EditDesktopFilesExtension extends Extension {
         }
         
         // If the user has not selected a custom command, or the command is invalid, use the default application
-        let file = Gio.File.new_for_path(appInfo.filename)
-        let uri = file.get_uri()
+        let uri = Gio.File.new_for_path(appInfo.filename).get_uri()
         Gio.AppInfo.launch_default_for_uri_async(uri, null, null, () => {})
+    }
+
+    /**
+     * Open the location of the desktop entry file in the default application (usually a file manager).
+     * If the file manager is known and supports selecting files, it will select the file.
+     * @param {Gio.AppInfo} appInfo - The AppInfo of the desktop entry whose location should be opened
+     */
+    openDesktopFileLocation(appInfo) {
+        let file = Gio.File.new_for_path(appInfo.filename)
+        let filepath = file.get_path()
+
+        const fileManagerCommands = {
+            'nautilus': (path) => `nautilus --select '${path}'`,
+            // Add more file managers and their commands here
+        }
+
+        // Get the default app for file:// URIs (usually nautilus or another file manager)
+        let defaultDirAppInfo = Gio.AppInfo.get_default_for_type('inode/directory', false)
+        let executable = defaultDirAppInfo ? defaultDirAppInfo.get_executable() : null
+
+        if (executable && fileManagerCommands[executable]) {
+            // Run the file manager with its select command
+            let selectCmd = fileManagerCommands[executable](filepath)
+            GLib.spawn_command_line_async(selectCmd)
+        } else {
+            // Fallback: open parent folder with default method without selecting the file
+            let parent = file.get_parent()
+            Gio.AppInfo.launch_default_for_uri_async(parent.get_uri(), null, null, () => {})
+        }
     }
 
     disable() {

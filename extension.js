@@ -23,13 +23,10 @@ import {AppMenu} from 'resource:///org/gnome/shell/ui/appMenu.js'
 import * as Main from 'resource:///org/gnome/shell/ui/main.js'
 
 /*
-* The Edit Desktop Files extension provides users with an "Edit" button on the pop-up menu
+* The Edit Desktop Files extension provides users with "Edit Entry" and "Open Entry Location" buttons on the pop-up menu
 * that appears when right-clicking an app icon in the app grid or dash.
-* When clicked, the backing desktop file is opened in an editor.
-*
-* This is done by injecting a function to run prior to the gnome-shell AppMenu's 'open' method.
-* The function inserts a new "Edit" MenuItem that, when clicked, either opens the backing desktop
-* file with the system's default app for desktop entries or a custom command supplied by the user.
+* When clicked, the backing desktop file is opened in the system's default application for desktop entries and
+* the location of the desktop file is opened in the system's default file manager, respectively.
 */
 export default class EditDesktopFilesExtension extends Extension {
 

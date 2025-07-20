@@ -33,7 +33,6 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js'
 */
 export default class EditDesktopFilesExtension extends Extension {
 
-    // TODO: Implement the 'Open Entry Location' functionality
     // TODO: Update translations to reflect the new menu item names
 
     enable() {

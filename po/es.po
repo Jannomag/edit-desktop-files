@@ -6,11 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-18 18:49-0500\n"
-"PO-Revision-Date: 2025-05-18 18:53-0500\n"
+"POT-Creation-Date: 2025-07-20 19:08-0500\n"
+"PO-Revision-Date: 2025-07-20 19:10-0500\n"
 "Last-Translator: Eric Ostrowski <eric.ostrowski@live.com>\n"
-"Language-Team: Spanish\n"
-"Language: es\n"
+"Language-Team: English\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -18,14 +18,34 @@ msgstr ""
 "X-Generator: Gtranslator 48.0\n"
 
 #: extension.js:43
-msgid "Edit"
-msgstr "Editar"
+msgid "Edit Entry"
+msgstr "Editar entrada"
 
-#: prefs.js:11 prefs.js:17
+#: extension.js:44
+msgid "Open Entry Location"
+msgstr "Abrir ubicación de la entrada"
+
+#: prefs.js:11 prefs.js:18
 msgid "General"
 msgstr "General"
 
-#: prefs.js:18
+#: prefs.js:19
+msgid "Hide or show the menu items."
+msgstr "Ocultar o mostrar los elementos del menú."
+
+#: prefs.js:25
+msgid "Hide \"Edit Entry\" Menu Item"
+msgstr "Ocultar elemento del menú “Editar entrada” "
+
+#: prefs.js:30
+msgid "Hide \"Open Entry Location\" Menu Item"
+msgstr "Ocultar elemento del menú “Abrir ubicación de la entrada”"
+
+#: prefs.js:36
+msgid "Advanced"
+msgstr "Avanzado"
+
+#: prefs.js:37
 msgid ""
 "By default, the desktop entry will be opened with your system's default "
 "application for .desktop files (usually GNOME Text Editor).\n"
@@ -42,15 +62,18 @@ msgstr ""
 "insertar la ruta al archivo de escritorio. Si falta, se utilizará el comando "
 "predeterminado.\n"
 
-#: prefs.js:27
+#: prefs.js:45
 msgid "Use Custom Edit Command"
 msgstr "Usar comando de edición personalizado"
 
-#: prefs.js:28
+#: prefs.js:46
 msgid "Whether to edit desktop files using a custom command"
 msgstr ""
 "Si se deben editar los archivos de escritorio usando un comando personalizado"
 
-#: prefs.js:33
+#: prefs.js:51
 msgid "Custom Edit Command"
 msgstr "Comando de edición personalizado"
+
+#~ msgid "Edit"
+#~ msgstr "Editar"

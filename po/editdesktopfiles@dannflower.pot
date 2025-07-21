@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-18 18:49-0500\n"
+"POT-Creation-Date: 2025-07-20 19:08-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,14 +18,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: extension.js:43
-msgid "Edit"
+msgid "Edit Entry"
 msgstr ""
 
-#: prefs.js:11 prefs.js:17
+#: extension.js:44
+msgid "Open Entry Location"
+msgstr ""
+
+#: prefs.js:11 prefs.js:18
 msgid "General"
 msgstr ""
 
-#: prefs.js:18
+#: prefs.js:19
+msgid "Hide or show the menu items."
+msgstr ""
+
+#: prefs.js:25
+msgid "Hide \"Edit Entry\" Menu Item"
+msgstr ""
+
+#: prefs.js:30
+msgid "Hide \"Open Entry Location\" Menu Item"
+msgstr ""
+
+#: prefs.js:36
+msgid "Advanced"
+msgstr ""
+
+#: prefs.js:37
 msgid ""
 "By default, the desktop entry will be opened with your system's default "
 "application for .desktop files (usually GNOME Text Editor).\n"
@@ -35,14 +55,14 @@ msgid ""
 "used instead.\n"
 msgstr ""
 
-#: prefs.js:27
+#: prefs.js:45
 msgid "Use Custom Edit Command"
 msgstr ""
 
-#: prefs.js:28
+#: prefs.js:46
 msgid "Whether to edit desktop files using a custom command"
 msgstr ""
 
-#: prefs.js:33
+#: prefs.js:51
 msgid "Custom Edit Command"
 msgstr ""

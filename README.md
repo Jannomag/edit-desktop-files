@@ -37,14 +37,14 @@ gnome-extensions prefs editdesktopfiles@dannflower
 #### Regenerate translation files
 Regenerate translation template:
 ```sh
-./script/template-translations.sh
+./scripts/template-translations.sh
 ```
 
 Make sure to remove the entry for "App Details" from the `.pot` files before updating the other translations as this translation will be handled by the Gnome Shell.
 
 Update existing translations:
 ```sh
-./script/update-translations.sh
+./scripts/update-translations.sh
 ```
 
 #### Recompile schemas

@@ -30,8 +30,6 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js'
 */
 export default class EditDesktopFilesExtension extends Extension {
 
-    // TODO: Update translations to reflect the new menu item names
-
     enable() {
         this._settings = this.getSettings()
         this._injectionManager = new InjectionManager()

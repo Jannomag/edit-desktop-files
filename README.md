@@ -4,7 +4,7 @@
 
 Adds "Edit Entry" and "Open Entry Location" options to the right-click menu of app icons in the app grid and dash.
 
-- `Edit Entry` opens the .desktop file associated with the app using the system's default editor or a custom command. Supports custom edit commands, allowing users to specify an alternative editor or additional options.
+- `Edit Entry` opens the .desktop file associated with the app using the system's default editor or a custom command configured in the extension's preferences.
 
 - `Open Entry Location` opens the folder containing the .desktop file in the default file manager.
 

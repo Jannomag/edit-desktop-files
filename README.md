@@ -2,7 +2,11 @@
 
 <img width="389" height="266" alt="Screenshot From 2025-07-20 19-52-15" src="https://github.com/user-attachments/assets/40b702d2-2121-497f-93c5-87bc7840292d" />
 
-Adds `Edit Entry` and `Open Entry Location` buttons to the pop-up menu displayed when right-clicking app icons in the app grid or dash. When clicked, it opens the `.desktop` file backing that app icon or the location of the desktop file is opened in the system's default file manager, respectively. Includes support for custom edit commands, allowing the user to specify another program or additional options when opening the file for editing.
+Adds "Edit Entry" and "Open Entry Location" options to the right-click menu of app icons in the app grid and dash.
+
+- `Edit Entry` opens the .desktop file associated with the app using the system's default editor or a custom command. Supports custom edit commands, allowing users to specify an alternative editor or additional options.
+
+- `Open Entry Location` opens the folder containing the .desktop file in the default file manager.
 
 ## Installation
 

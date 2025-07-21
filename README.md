@@ -1,8 +1,8 @@
 # Edit Desktop Files GNOME Shell Extension
 
-![Screenshot from 2024-09-28 18-21-00](https://github.com/user-attachments/assets/bcdee9ae-2886-47ac-a914-1a01d0f009ec)
+<img width="389" height="266" alt="Screenshot From 2025-07-20 19-52-15" src="https://github.com/user-attachments/assets/40b702d2-2121-497f-93c5-87bc7840292d" />
 
-Adds an `Edit` button to the pop-up menu displayed when right-clicking app icons in the app grid or dash. When clicked, it opens the `.desktop` file backing that app icon. Includes support for custom edit commands, allowing the user to specify another program or additional options when opening the file.
+Adds `Edit Entry` and `Open Entry Location` buttons to the pop-up menu displayed when right-clicking app icons in the app grid or dash. When clicked, it opens the `.desktop` file backing that app icon or the location of the desktop file is opened in the system's default file manager, respectively. Includes support for custom edit commands, allowing the user to specify another program or additional options when opening the file for editing.
 
 ## Installation
 

@@ -8,27 +8,46 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-18 18:49-0500\n"
-"PO-Revision-Date: 2025-05-18 19:00-0500\n"
+"POT-Creation-Date: 2025-07-20 18:44-0500\n"
+"PO-Revision-Date: 2025-07-20 19:04-0500\n"
 "Last-Translator: Eric Ostrowski <eric.ostrowski@live.com>\n"
-"Language-Team: Russian\n"
-"Language: ru\n"
+"Language-Team: English\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 48.0\n"
 
 #: extension.js:43
-msgid "Edit"
-msgstr "Редактировать"
+msgid "Edit Entry"
+msgstr "Изменить запись"
 
-#: prefs.js:11 prefs.js:17
+#: extension.js:44
+msgid "Open Entry Location"
+msgstr "Открыть расположение записи"
+
+#: prefs.js:11 prefs.js:18
 msgid "General"
 msgstr "Настройки"
 
-#: prefs.js:18
+#: prefs.js:19
+msgid "Hide or show the menu items."
+msgstr "Скрыть или показать элементы меню."
+
+#: prefs.js:25
+msgid "Hide Edit Entry Menu Item"
+msgstr "Скрыть пункт меню «Изменить запись»"
+
+#: prefs.js:30
+msgid "Hide Open Entry Location Menu Item"
+msgstr "Скрыть пункт меню «Открыть расположение записи»"
+
+#: prefs.js:36
+msgid "Advanced"
+msgstr "Дополнительно"
+
+#: prefs.js:37
 msgid ""
 "By default, the desktop entry will be opened with your system's default "
 "application for .desktop files (usually GNOME Text Editor).\n"
@@ -44,14 +63,17 @@ msgstr ""
 "место, куда будет подставлен путь к файлу. Если параметр отсутствует, будет "
 "использован стандартный редактор.\n"
 
-#: prefs.js:27
+#: prefs.js:45
 msgid "Use Custom Edit Command"
 msgstr "Использовать другой редактор"
 
-#: prefs.js:28
+#: prefs.js:46
 msgid "Whether to edit desktop files using a custom command"
 msgstr "Открывать .desktop-файлы в казанном редакторе"
 
-#: prefs.js:33
+#: prefs.js:51
 msgid "Custom Edit Command"
 msgstr "Команда для запуска редактора"
+
+#~ msgid "Edit"
+#~ msgstr "Редактировать"

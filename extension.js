@@ -38,10 +38,12 @@ export default class EditDesktopFilesExtension extends Extension {
         this._addedOpenLocationMenuItems = []
 
         // Call gettext here explicitly so the MenuItems can be localized as part of this extension
+        // as calling gettext inside the injected method will cause the strings to be localized as
+        // part of the Gnome Shell itself.
         let localizedEditStr = gettext('Edit Entry')
         let localizedOpenLocationStr = gettext('Open Entry Location')
 
-        // List for changes to the 'hide' settings
+        // Listen for changes to the 'hide' settings
         this._settings.connect('changed::hide-edit-menu-item', (settings, key) => {
             if (settings.get_boolean(key)) {
                 this.removeEditMenuItems()
@@ -63,7 +65,6 @@ export default class EditDesktopFilesExtension extends Extension {
                 const addedEditMenuItems = this._addedEditMenuItems
                 const addedOpenLocationMenuItems = this._addedOpenLocationMenuItems
 
-                // Helper functions
                 const openDesktopFile = this.openDesktopFile
                 const openDesktopFileLocation = this.openDesktopFileLocation
                 const hideOverview = this.hideOverview
@@ -71,7 +72,7 @@ export default class EditDesktopFilesExtension extends Extension {
 
                 return function (...args) {
 
-                    // Don't display the menu item for windows not backed by a desktop file
+                    // Don't display the menu items for windows not backed by a desktop file
                     const appInfo = this._app?.app_info
                     if (!appInfo) {
                         return originalMethod.call(this, ...args)
@@ -80,21 +81,21 @@ export default class EditDesktopFilesExtension extends Extension {
                     // Bind the helper function to the `this` context of the AppMenu
                     const boundMoveMenuItemAfter = moveMenuItemAfter.bind(this)
 
-                    // `Edit Desktop Entry` MenuItem
+                    // `Edit Entry` MenuItem
                     if (!settings.get_boolean("hide-edit-menu-item") && !this._editDesktopFilesExtensionEditMenuItem) {
                         let editMenuItem = this.addAction(localizedEditStr, () => {
                             openDesktopFile(metadata, settings, appInfo)
                             hideOverview()
                         })
 
-                        // Move the 'Edit' MenuItem to be after the 'App Details' MenuItem
+                        // Move the 'Edit Entry' MenuItem to be after the 'App Details' MenuItem
                         boundMoveMenuItemAfter(editMenuItem, _('App Details'))
 
                         this._editDesktopFilesExtensionEditMenuItem = editMenuItem
                         addedEditMenuItems.push(editMenuItem)
                     }
 
-                    // `Open Desktop Entry Location` MenuItem
+                    // `Open Entry Location` MenuItem
                     if (!settings.get_boolean("hide-open-entry-location-menu-item") && !this._editDesktopFilesExtensionOpenLocationMenuItem) {
                         let openLocationMenuItem = this.addAction(localizedOpenLocationStr, () => {
                             openDesktopFileLocation(appInfo)
@@ -104,7 +105,7 @@ export default class EditDesktopFilesExtension extends Extension {
                         // Move the 'Open Entry Location' MenuItem to be after the 'Edit Entry' MenuItem if it exists
                         let success = boundMoveMenuItemAfter(openLocationMenuItem, localizedEditStr)
                         if (!success) {
-                            success = boundMoveMenuItemAfter(openLocationMenuItem, _('App Details'))
+                            boundMoveMenuItemAfter(openLocationMenuItem, _('App Details'))
                         }
 
                         this._editDesktopFilesExtensionOpenLocationMenuItem = openLocationMenuItem
@@ -133,8 +134,8 @@ export default class EditDesktopFilesExtension extends Extension {
 
     /**
      * Move the MenuItem to be after the MenuItem with the given afterLabel.
-     * If no such MenuItem exists, the MenuItem will be added after the
-     * 'App Details' MenuItem.
+     * If the MenuItem with the given afterLabel does not exist, the MenuItem will not be moved and false will be returned.
+     * Otherwise, the MenuItem will be moved and true will be returned.
      * @param {Object} menuItem - The MenuItem to be moved
      * @param {string} afterLabel - The label of the MenuItem after which the MenuItem should be moved
      * @returns {boolean} - Returns true if the MenuItem was moved, false if no such MenuItem exists with the given label
@@ -220,7 +221,7 @@ export default class EditDesktopFilesExtension extends Extension {
     }
 
     /**
-     * Remove the `Edit` MenuItems from the menus
+     * Remove the `Edit Entry` MenuItems from the menus
      * @returns {void}
      */
     removeEditMenuItems() {
@@ -236,7 +237,7 @@ export default class EditDesktopFilesExtension extends Extension {
     }
 
     /**
-     * Remove the `Show Entry Location` MenuItems from the menus
+     * Remove the `Open Entry Location` MenuItems from the menus
      * @returns {void}
      */
     removeOpenLocationMenuItems() {
